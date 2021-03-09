@@ -11,7 +11,7 @@ import { UserResolver } from "./resolvers/user";
 import redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
-import { MyContext } from "./types";
+import cors from "cors";
 
 const main = async () => {
   const orm = await MikroORM.init(microConfig);
@@ -24,6 +24,13 @@ const main = async () => {
     host: "localhost",
     port: 6379,
   });
+
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
 
   redisClient.on("error", function (err) {
     console.log("Could not establish a connection with redis. " + err);
@@ -57,10 +64,13 @@ const main = async () => {
       validate: false,
       resolvers: [HelloResolver, PostResolver, UserResolver],
     }),
-    context: ({ req, res }): MyContext => ({ em: orm.em, req, res }),
+    context: ({ req, res }) => ({ em: orm.em, req, res }),
   });
 
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+  });
 
   app.listen(4000, () => {
     console.log("Server starting on localhost:4000");
