@@ -20,10 +20,8 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient({
-    host: "localhost",
-    port: 6379,
-  });
+  const redisClient = redis.createClient();
+  app.set("trust proxy", 1);
 
   app.use(
     cors({
