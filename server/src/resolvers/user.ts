@@ -143,23 +143,23 @@ export class UserResolver {
     const hashPassword = await argon2.hash(options.password);
     let user;
     try {
-      User.create({
-        username: options.username,
-        email: options.email,
-        password: hashPassword,
-      }).save();
-      // const result = await getConnection()
-      //   .createQueryBuilder()
-      //   .insert()
-      //   .into(User)
-      //   .values({
-      //     username: options.username,
-      //     email: options.email,
-      //     password: hashPassword,
-      //   })
-      //   .returning("*")
-      //   .execute();
-      // user = result.raw[0];
+      // const result = await User.create({
+      //   username: options.username,
+      //   email: options.email,
+      //   password: hashPassword,
+      // }).save();
+      const result = await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values({
+          username: options.username,
+          email: options.email,
+          password: hashPassword,
+        })
+        .returning("*")
+        .execute();
+      user = result.raw[0];
     } catch (err) {
       if (err.code === "23505") {
         return {
