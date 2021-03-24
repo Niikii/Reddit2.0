@@ -3,23 +3,34 @@ import { Form, Formik } from "formik";
 import React from "react";
 import { InputField } from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
-import { useCreatePostMutation } from "../generated/graphql";
+import { useCreatePostMutation, useMeQuery } from "../generated/graphql";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { Layout } from "../components/Layout";
+import { useEffect } from "react";
 
 const CreatePost: React.FC<{}> = ({}) => {
+  const [{ data, fetching }] = useMeQuery();
   const router = useRouter();
   const [, createPost] = useCreatePostMutation();
+
+  useEffect(() => {
+    if (!fetching && !data?.me) {
+      router.replace("/login");
+    }
+  }, [data, router]);
 
   return (
     <Layout variant="small">
       <Formik
         initialValues={{ title: "", text: "" }}
         onSubmit={async (values) => {
-          await createPost({ input: values });
-          router.push("/");
+          const { error } = await createPost({ input: values });
+          console.log("error: ", error);
+          if (!error) {
+            router.push("/");
+          }
         }}
       >
         {({ isSubmitting }) => (
