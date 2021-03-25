@@ -12,8 +12,6 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     pause: isServer(),
   });
 
-  console.log("data: ", data);
-
   let body = null;
 
   //data is loading
