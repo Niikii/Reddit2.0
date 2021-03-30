@@ -6,13 +6,16 @@ import {
   Link,
   Stack,
   Text,
+  IconButton,
 } from "@chakra-ui/react";
+import { TriangleUpIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
 import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import UpvoteSection from "../components/UpvoteSection";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -42,11 +45,14 @@ const Index = () => {
       ) : (
         <Stack spacing={8}>
           {data!.posts.posts.map((p) => (
-            <Box key={p.id} p={p.id} shadow="md" borderWidth="1px" padding={5}>
-              <Heading fontSize="xl">{p.title}</Heading>
-              <Text>posted by {p.creator.username}</Text>
-              <Text mt={4}>{p.textSnippet}...</Text>
-            </Box>
+            <Flex key={p.id} p={p.id} shadow="md" borderWidth="1px" padding={5}>
+              <UpvoteSection post={p}/>
+              <Box>
+                <Heading fontSize="xl">{p.title}</Heading>
+                <Text>posted by {p.creator.username}</Text>
+                <Text mt={4}>{p.textSnippet}...</Text>
+              </Box>
+            </Flex>
           ))}
         </Stack>
       )}
