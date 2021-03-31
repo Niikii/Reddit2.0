@@ -117,7 +117,7 @@ export class PostResolver {
     let cursorIdx = 3;
     if (cursor) {
       replacements.push(new Date(parseInt(cursor)));
-      cursorIdx = replacements.length + 1;
+      cursorIdx = replacements.length;
     }
 
     const posts = await getConnection().query(
@@ -167,7 +167,7 @@ export class PostResolver {
 
   @Query(() => Post, { nullable: true })
   post(@Arg("id", () => Int) id: number): Promise<Post | undefined> {
-    return Post.findOne(id);
+    return Post.findOne(id, { relations: ["creator"] });
   }
 
   @Mutation(() => Post)
