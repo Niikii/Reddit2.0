@@ -6,16 +6,14 @@ import {
   Link,
   Stack,
   Text,
-  IconButton,
 } from "@chakra-ui/react";
-import { TriangleUpIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
+import UpvoteSection from "../components/UpvoteSection";
 import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import UpvoteSection from "../components/UpvoteSection";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -32,23 +30,20 @@ const Index = () => {
 
   return (
     <Layout>
-      <Flex align="center">
-        <Heading>MyReddit:)</Heading>
-        <NextLink href="/create-post">
-          <Link ml="auto">Create post</Link>
-        </NextLink>
-      </Flex>
-
-      <br />
       {!data && fetching ? (
         <div>louding...</div>
       ) : (
         <Stack spacing={8}>
           {data!.posts.posts.map((p) => (
             <Flex key={p.id} p={p.id} shadow="md" borderWidth="1px" padding={5}>
-              <UpvoteSection post={p}/>
+              <UpvoteSection post={p} />
               <Box>
-                <Heading fontSize="xl">{p.title}</Heading>
+                <NextLink href="/post/[id]" as={`/post/${p.id}`}>
+                  <Link>
+                    <Heading fontSize="xl">{p.title}</Heading>
+                  </Link>
+                </NextLink>
+
                 <Text>posted by {p.creator.username}</Text>
                 <Text mt={4}>{p.textSnippet}...</Text>
               </Box>
