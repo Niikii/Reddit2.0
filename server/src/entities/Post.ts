@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 import { User } from "./User";
 import { Upvote } from "./Upvote";
 
@@ -28,8 +28,11 @@ export class Post extends BaseEntity {
   text!: string;
 
   @Field()
-  @Column({ type: "int", default: 0 })
+  @Column({ type: "int" })
   points!: number;
+
+  @Field(() => Int, { nullable: true })
+  voteStatus: number | null; //1 or -1 or null
 
   @Field()
   @Column()

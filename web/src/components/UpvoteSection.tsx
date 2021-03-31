@@ -1,10 +1,13 @@
 import { TriangleUpIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { Flex, IconButton, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { PostsQuery, useVoteMutation } from "../generated/graphql";
+import {
+  PostSnippetFragment,
+  useVoteMutation,
+} from "../generated/graphql";
 
 interface UpvoteSectionProps {
-  post: PostsQuery["posts"]["posts"][0];
+  post: PostSnippetFragment;
 }
 
 export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
@@ -16,6 +19,9 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
     <Flex direction="column" justifyItems="center" alignItems="center" mr={5}>
       <IconButton
         onClick={async () => {
+          if (post.voteStatus === 1) {
+            return;
+          }
           setLoadingState("upvote-loading");
           await vote({
             postId: post.id,
@@ -25,7 +31,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
         }}
         aria-label="Upvote post"
         icon={<TriangleUpIcon />}
-        colorScheme="pink"
+        colorScheme={post.voteStatus === 1 ? "green" : undefined}
         fontSize="18px"
         variant="link"
         size="xs"
@@ -34,6 +40,9 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
 
       <IconButton
         onClick={async () => {
+          if (post.voteStatus === -1) {
+            return;
+          }
           setLoadingState("downvote-loading");
           await vote({
             postId: post.id,
@@ -43,7 +52,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
         }}
         aria-label="Downvote post"
         icon={<TriangleDownIcon />}
-        colorScheme="pink"
+        colorScheme={post.voteStatus === -1 ? "red" : undefined}
         fontSize="18px"
         variant="link"
         size="xs"
