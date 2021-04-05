@@ -16,6 +16,7 @@ import { User } from "./entities/User";
 import path from "path";
 import { Upvote } from "./entities/Upvote";
 import { createUserLoader } from "./utils/createUserLoader";
+import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 
 //rerun
 
@@ -84,6 +85,7 @@ const main = async () => {
       res,
       redis,
       userLoader: createUserLoader(),
+      upvoteLoader: createUpvoteLoader(),
     }),
   });
 
