@@ -11,7 +11,7 @@ export const createUpvoteLoader = () =>
       });
 
       return keys.map(
-        (key) => upvoteIdsToUpvote[`${key.userId} | ${key.postId}`]
+        (key) => upvoteIdsToUpvote[`${key.userId}|${key.postId}`]
       );
     }
   );
