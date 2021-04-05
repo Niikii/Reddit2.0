@@ -28,13 +28,18 @@ const Index = () => {
     limit: 15,
     cursor: null as string | null,
   });
-  const [{ data, fetching }] = usePostsQuery({
+  const [{ data, error, fetching }] = usePostsQuery({
     variables,
   });
   const [, deletePost] = useDeletePostMutation();
 
   if (!fetching && !data) {
-    return <div>query failed for some reason</div>;
+    return (
+      <div>
+        <div>query failed for some reason</div>
+        <div>{error?.message}</div>
+      </div>
+    );
   }
 
   return (
@@ -65,7 +70,10 @@ const Index = () => {
                       {p.textSnippet}...
                     </Text>
                     <Box ml="auto">
-                      <EditDeletePostButtons id={p.id} creatorId={p.creator.id} />
+                      <EditDeletePostButtons
+                        id={p.id}
+                        creatorId={p.creator.id}
+                      />
                     </Box>
                   </Flex>
                 </Box>
