@@ -61,7 +61,15 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   }
   return (
     //aligning things take note//
-    <Flex zIndex={1} position="sticky" top={0} bg="pink" p={2} align="center">
+    <Flex
+      zIndex={1}
+      position="sticky"
+      top={0}
+      bg="lightBlue"
+      p={2}
+      align="center"
+      boxShadow="md"
+    >
       <Flex maxWidth={800} align="center" flex={1} m="auto">
         <NextLink href="/">
           <Link>
